@@ -6,7 +6,7 @@ void main() async{
       5432,
       "MTRS",
     username:"postgres",
-      password:"14rooh",
+      password:"",
   );
   await connection.open();
   var output = await connection.query(
