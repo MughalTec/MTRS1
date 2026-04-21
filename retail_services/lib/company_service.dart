@@ -13,7 +13,7 @@ class CompanyService {
       final conn = await DatabaseConnection.getConnection();
 
       // SQL Query — now fetching ALL real fields
-      final results = await conn.query(
+      final results = await conn.mappedResultsQuery(
           '''
         SELECT 
         "CompanyName",
@@ -22,23 +22,27 @@ class CompanyService {
         "State",
         "Zipcode",
         "Country"
-        FROM mtrs."tblCompaney"
+        FROM mtrs."tblCompany" as Cmp
         '''
       );
 
+
+
       // Convert database rows into usable list
-      return results.map((row) {
+      var ListofCompanies= results.map((row) {
 
         return {
-          "name": row[0],
-          "address": row[1],
-          "city": row[2],
-          "state": row[3],
-          "zipcode": row[4],
-          "country": row[5],
+          "name":  row["tblCompany"]?["CompanyName"].toString(),
+          "address": row["tblCompany"]?["BillingAddress"].toString(),
+          "city": row["tblCompany"]?["City"].toString(),
+          "state": row["tblCompany"]?["State"].toString(),
+          "zipcode": row["tblCompany"]?["Zipcode"].toString(),
+          "country": row["tblCompany"]?["Country"].toString(),
         };
 
       }).toList();
+      if(!conn.isClosed) conn.close();
+      return ListofCompanies;
 
     }
 
@@ -50,7 +54,7 @@ class CompanyService {
       return [
 
         {
-          "name": "Tech Store Ltd",
+          "name": "Tech Store Lt",
           "address": "Street 12",
           "city": "Tallinn",
           "state": "Harju",
